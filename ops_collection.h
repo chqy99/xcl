@@ -1,6 +1,7 @@
 #pragma once
 
 #include <pybind11/pybind11.h>
+#include <torch/extension.h>
 #include <torch/torch.h>
 
 #include <iostream>
@@ -58,7 +59,7 @@ enum ConnectedMode {
   FOUR_CONNECT,
   EIGHT_CONNECT,
   FULL_CONNECT
-}
+};
 
 /*
 - 函数说明：在input内逐[block_h, block_w]统计color_list中各个颜色的出现次数。
