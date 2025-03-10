@@ -10,6 +10,7 @@ template <typename T>
 using vector = std::vector<T>;
 
 namespace py = pybind11;
+using uint8 = unsigned char;
 
 /*
 - enum说明：接口返回状态码
@@ -20,7 +21,7 @@ namespace py = pybind11;
     内存分配失败，
     运行时错误
 */
-enum class XclStatus {
+enum XclStatus {
   XCL_STATUS_SUCCESS = 0,
   XCL_STATUS_BAD_PARAM = 1,
   XCL_STATUS_NOT_SUPPORTED = 2,
@@ -53,26 +54,11 @@ using Point = TPoint<int>;
     八连通，
     全连通
 */
-enum class ConnectedMode {
+enum ConnectedMode {
   FOUR_CONNECT,
   EIGHT_CONNECT,
   FULL_CONNECT
 }
-
-/*
-- 函数说明：输入序列图像和历史路径，输出到目的地的最短规划路径
-- 参数说明：
-    segms: 输入识别后的序列图像，LAYOUT为NHWC，DTYPE为uint6
-    hispath: 长度为N的历史路径，第0个路径只含有一个起点，后续的路径与前（N-1）个输入序列相对应
-    outpath: 到目的地的最短规划路径，目的地可能有多个
-    valid_value: 可通行区域的标签值
-    des_value: 目的地的标签值（目标值）
-    connected_mode: 移动可选择的方向
-*/
-XclStatus
-xclPathPlan(const at::Tensor &segms, const vector<vector<Point>> &hispath,
-            vector<vector<Point>> outpath, const vector<uint8> &valid_value,
-            const vector<uint8> &des_value, ConnectedMode connected_mode);
 
 /*
 - 函数说明：在input内逐[block_h, block_w]统计color_list中各个颜色的出现次数。
@@ -86,3 +72,17 @@ xclPathPlan(const at::Tensor &segms, const vector<vector<Point>> &hispath,
 XclStatus xclCountInBlock(const at::Tensor &input, const at::Tensor &color_list,
                           at::Tensor output, const int &block_h,
                           const int &block_w);
+
+/*
+- 函数说明：输入序列图像和历史路径，输出到目的地的最短规划路径
+- 参数说明：
+    segms: 输入识别后的序列图像，LAYOUT为NHWC，DTYPE为uint6
+    hispath: 长度为N的历史路径，第0个路径只含有一个起点，后续的路径与前（N-1）个输入序列相对应
+    outpath: 到目的地的最短规划路径，目的地可能有多个
+    valid_value: 可通行区域的标签值
+    des_value: 目的地的标签值（目标值）
+    connected_mode: 移动可选择的方向
+*/
+XclStatus xclPathPlan(const at::Tensor &segms, const vector<vector<Point>> &hispath,
+  vector<vector<Point>> outpath, const vector<uint8> &valid_value,
+  const vector<uint8> &des_value, ConnectedMode connected_mode);

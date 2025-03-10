@@ -58,8 +58,8 @@ foreach(kernel ${build_kernel} )
 endforeach()
 
 # 编译源文件，指定编译为模块
-add_library(xcl SHARED ${src_files})
-add_library(xcl MODULE pybind11_impl.cpp)
+# message(STATUS "src_files:[${src_files}]")
+add_library(xcl MODULE ${src_files} pybind_impl.cpp)
 ################################################################################
 
 # 查找 pybind11
