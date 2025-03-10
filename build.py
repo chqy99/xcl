@@ -16,8 +16,9 @@ if not os.path.exists(build_dir):
 
 # 设置 XCL_SPECIFIC_OP 环境变量（如果提供了 --filter 参数）
 if args.filter:
-    os.environ["XCL_SPECIFIC_OP"] = args.filter
-    print(f"XCL_SPECIFIC_OP environment variable set to: {args.filter}")
+    xcl_specific_op = args.filter
+else:
+    xcl_specific_op = ""
 
 # 获取 pybind11 的 CMake 路径
 try:
@@ -47,9 +48,10 @@ os.chdir(build_dir)
 # 运行 CMake 配置
 cmake_command = [
     "cmake",
+    "../",
     f"-Dpybind11_DIR={pybind11_dir}",
     f"-DCMAKE_PREFIX_PATH={torch_dir}",
-    ".."
+    f"-DXCL_SPECIFIC_OP={xcl_specific_op}"
 ]
 print("Running cmake...")
 subprocess.run(cmake_command, check=True)
@@ -63,8 +65,3 @@ print("Compiling project...")
 subprocess.run(build_tool, shell=True, check=True)
 
 print("Build complete!")
-
-# 取消 XCL_SPECIFIC_OP 环境变量（如果之前设置过）
-if args.filter:
-    del os.environ["XCL_SPECIFIC_OP"]
-    print("XCL_SPECIFIC_OP environment variable unset")
