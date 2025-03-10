@@ -67,8 +67,6 @@ enum class ConnectedMode {
     outpath: 到目的地的最短规划路径，目的地可能有多个
     valid_value: 可通行区域的标签值
     des_value: 目的地的标签值（目标值）
-    sample_ratio: 采样率
-    sampled_threshold: 采样后的范围阈值，如果低于该阈值则视为无效区域，在[0,1]之间
     connected_mode: 移动可选择的方向
 */
 XclStatus xclPathPlan(const at::Tensor &segms,
@@ -76,6 +74,19 @@ XclStatus xclPathPlan(const at::Tensor &segms,
                       vector<vector<Point>> outpath,
                       const vector<uint8> &valid_value,
                       const vector<uint8> &des_value,
-                      ConnectedMode connected_mode,
-                      const int &sample_ratio,
-                      const float &sampled_threshold);
+                      ConnectedMode connected_mode);
+
+/*
+- 函数说明：在input内逐[block_h, block_w]统计color_list中各个颜色的出现次数。
+- 参数说明：
+    input：输入图像，LAYOUT为NHWC
+    color_list：需要统计的颜色信息，shape 为[L，C]
+    output: 输出图像，shape为[L, Ho, Wo, Count]
+    block_h: H维度的采样率
+    block_w: W维度的采样率
+*/
+XclStatus xclCountInBlock(const at::Tensor &input,
+                          const at::Tensor &color_list,
+                          at::Tensor output,
+                          const int &block_h,
+                          const int &block_w);
