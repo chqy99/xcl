@@ -1,12 +1,23 @@
 import os
 import subprocess
 import sys
+import argparse
+
+# 解析命令行参数
+parser = argparse.ArgumentParser(description="Build script with optional filter")
+parser.add_argument("--filter", help="Set XCL_SPECIFIC_OP environment variable")
+args = parser.parse_args()
 
 # 检查并创建构建目录
 build_dir = "build"
 if not os.path.exists(build_dir):
     os.makedirs(build_dir)
     print(f"Build directory '{build_dir}' created")
+
+# 设置 XCL_SPECIFIC_OP 环境变量（如果提供了 --filter 参数）
+if args.filter:
+    os.environ["XCL_SPECIFIC_OP"] = args.filter
+    print(f"XCL_SPECIFIC_OP environment variable set to: {args.filter}")
 
 # 获取 pybind11 的 CMake 路径
 try:
@@ -52,3 +63,8 @@ print("Compiling project...")
 subprocess.run(build_tool, shell=True, check=True)
 
 print("Build complete!")
+
+# 取消 XCL_SPECIFIC_OP 环境变量（如果之前设置过）
+if args.filter:
+    del os.environ["XCL_SPECIFIC_OP"]
+    print("XCL_SPECIFIC_OP environment variable unset")

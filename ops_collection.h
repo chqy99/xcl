@@ -21,28 +21,28 @@ namespace py = pybind11;
     运行时错误
 */
 enum class XclStatus {
-  XCL_STATUS_SUCCESS          = 0,
-  XCL_STATUS_BAD_PARAM        = 1,
-  XCL_STATUS_NOT_SUPPORTED    = 2,
-  XCL_STATUS_ALLOC_FAILED     = 3,
+  XCL_STATUS_SUCCESS = 0,
+  XCL_STATUS_BAD_PARAM = 1,
+  XCL_STATUS_NOT_SUPPORTED = 2,
+  XCL_STATUS_ALLOC_FAILED = 3,
   XCL_STATUS_EXECUTION_FAILED = 4,
 };
 
-template<typename T>
+template <typename T>
 struct TPoint {
-    T px;
-    T py;
+  T px;
+  T py;
 
-    TPoint() : px(static_cast<T>(0)), py(static_cast<T>(0)) {}
-    TPoint(T x, T y) : px(x), py(y) {}
-    TPoint(const TPoint& other) : px(other.px), py(other.py) {}
-    TPoint& operator=(const TPoint& other) {
-        if (this != &other) {
-            px = other.px;
-            py = other.py;
-        }
-        return *this;
+  TPoint() : px(static_cast<T>(0)), py(static_cast<T>(0)) {}
+  TPoint(T x, T y) : px(x), py(y) {}
+  TPoint(const TPoint &other) : px(other.px), py(other.py) {}
+  TPoint &operator=(const TPoint &other) {
+    if (this != &other) {
+      px = other.px;
+      py = other.py;
     }
+    return *this;
+  }
 };
 using Point = TPoint<int>;
 
@@ -69,12 +69,10 @@ enum class ConnectedMode {
     des_value: 目的地的标签值（目标值）
     connected_mode: 移动可选择的方向
 */
-XclStatus xclPathPlan(const at::Tensor &segms,
-                      const vector<vector<Point>> &hispath,
-                      vector<vector<Point>> outpath,
-                      const vector<uint8> &valid_value,
-                      const vector<uint8> &des_value,
-                      ConnectedMode connected_mode);
+XclStatus
+xclPathPlan(const at::Tensor &segms, const vector<vector<Point>> &hispath,
+            vector<vector<Point>> outpath, const vector<uint8> &valid_value,
+            const vector<uint8> &des_value, ConnectedMode connected_mode);
 
 /*
 - 函数说明：在input内逐[block_h, block_w]统计color_list中各个颜色的出现次数。
@@ -85,8 +83,6 @@ XclStatus xclPathPlan(const at::Tensor &segms,
     block_h: H维度的采样率
     block_w: W维度的采样率
 */
-XclStatus xclCountInBlock(const at::Tensor &input,
-                          const at::Tensor &color_list,
-                          at::Tensor output,
-                          const int &block_h,
+XclStatus xclCountInBlock(const at::Tensor &input, const at::Tensor &color_list,
+                          at::Tensor output, const int &block_h,
                           const int &block_w);
