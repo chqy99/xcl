@@ -10,7 +10,6 @@
 template <typename T>
 using vector = std::vector<T>;
 
-namespace py = pybind11;
 using uint8 = unsigned char;
 
 /*
