@@ -40,3 +40,10 @@ XclStatus xclCountInBlock(const at::Tensor &input, const at::Tensor &colors,
   }
   return XCL_STATUS_SUCCESS;
 }
+
+namespace py = pybind11;
+
+PYBIND11_MODULE(xcl, m) {
+  m.def("count_in_block", &xclCountInBlock,
+        "Count the occurrences of each color in color_list within each [block_h, block_w] block in input.");
+}
