@@ -21,10 +21,16 @@ XclStatus xclCountInBlockCheck(const at::Tensor &input,
   TORCH_CHECK(block_w > 0, "block_w must great than 0.");
   // check single shape
   c10::IntArrayRef input_shape = input.sizes();
+  int64_t input_dim = input_shape.size();
   auto colors_shape = colors.sizes();
+  int64_t colors_dim = colors_shape.size();
   auto output_shape = output.sizes();
+  int64_t output_dim = output_shape.size();
+  TORCH_CHECK(input_dim == 3 || input_dim == 4);
+  TORCH_CHECK(colors_dim == 2);
+  TORCH_CHECK(output_dim == 4 || output_dim == 5);
   // check correlation
-
+  TORCH_CHECK(input_dim + 1 == output_dim);
   // check num
 
   return XCL_STATUS_SUCCESS;
@@ -41,9 +47,7 @@ XclStatus xclCountInBlock(const at::Tensor &input, const at::Tensor &colors,
   return XCL_STATUS_SUCCESS;
 }
 
-namespace py = pybind11;
-
-PYBIND11_MODULE(xcl, m) {
+void register_count_in_block(py::module& m) {
   m.def("count_in_block", &xclCountInBlock,
         "Count the occurrences of each color in color_list within each [block_h, block_w] block in input.");
 }

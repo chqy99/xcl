@@ -58,7 +58,7 @@ endforeach()
 
 # 编译源文件，指定编译为模块
 # message(STATUS "src_files:[${src_files}]")
-add_library(xcl MODULE ${src_files})
+add_library(xcl MODULE ${src_files} pybind_main.cpp)
 ################################################################################
 
 # 查找 pybind11

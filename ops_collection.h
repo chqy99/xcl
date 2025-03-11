@@ -70,6 +70,7 @@ enum ConnectedMode { FOUR_CONNECT, EIGHT_CONNECT, FULL_CONNECT };
 XclStatus xclCountInBlock(const at::Tensor &input, const at::Tensor &colors,
                           at::Tensor output, const uint &block_h,
                           const uint &block_w);
+void register_count_in_block(py::module &m);
 
 /*
 - 函数说明：输入序列图像和历史路径，输出到目的地的最短规划路径
@@ -88,3 +89,4 @@ XclStatus xclPathPlan(const at::Tensor &segms,
                       const vector<uint8> &valid_value,
                       const vector<uint8> &des_value,
                       ConnectedMode connected_mode);
+void register_path_plan(py::module &m);

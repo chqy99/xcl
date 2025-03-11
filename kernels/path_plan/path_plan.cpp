@@ -8,3 +8,5 @@ XclStatus xclPathPlan(const at::Tensor &segms,
                       ConnectedMode connected_mode) {
   return XCL_STATUS_SUCCESS;
 }
+
+void register_path_plan(py::module &m) { m.def("path_plan", &xclPathPlan, ""); }
