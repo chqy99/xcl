@@ -47,9 +47,9 @@ foreach(kernel ${build_kernel} )
     endif()
   endforeach ()
   if (IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/kernels/${kernel}")
-    file(GLOB_RECURSE src_files ${src_files} "${CMAKE_CURRENT_SOURCE_DIR}/kernels/${kernel}/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/kernels/${kernel}/*.mlu")
+    file(GLOB_RECURSE src_files ${src_files} "${CMAKE_CURRENT_SOURCE_DIR}/kernels/${kernel}/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/kernels/${kernel}/*.cu")
   elseif(IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/kernels/${kernel_parent_dir}/${kernel}")
-    file(GLOB_RECURSE src_files ${src_files} "${CMAKE_CURRENT_SOURCE_DIR}/kernels/${kernel_parent_dir}/${kernel}/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/kernels/${kernel_parent_dir}/${kernel}/*.mlu")
+    file(GLOB_RECURSE src_files ${src_files} "${CMAKE_CURRENT_SOURCE_DIR}/kernels/${kernel_parent_dir}/${kernel}/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/kernels/${kernel_parent_dir}/${kernel}/*.cu")
   else()
     message(WARNING "kernel/${kernel} is not a directory, ${kernel} is an alias")
     continue()
@@ -58,7 +58,7 @@ endforeach()
 
 # 编译源文件，指定编译为模块
 # message(STATUS "src_files:[${src_files}]")
-add_library(xcl MODULE ${src_files} pybind_main.cpp)
+add_library(xcl MODULE ${src_files} kernels/pybind_main.cpp)
 ################################################################################
 
 # 查找 pybind11

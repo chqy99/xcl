@@ -1,40 +1,8 @@
 #pragma once
 
-#include <pybind11/pybind11.h>
-#include <torch/extension.h>
-#include <torch/torch.h>
-
-#include <climits>
-#include <iostream>
-#include <vector>
-
-namespace py = pybind11;
+#include "kernels/ops_common.h"
 
 namespace xcl {
-
-template <typename T>
-using vector = std::vector<T>;
-
-// typedef dtype
-using uint8 = unsigned char;
-using uint = unsigned int;
-
-/*
-- enum说明：接口返回状态码
-- enum值说明：
-    运行成功，
-    参数错误，
-    无法支持情况，
-    内存分配失败，
-    运行时错误
-*/
-enum XclStatus {
-  XCL_STATUS_SUCCESS = 0,
-  XCL_STATUS_BAD_PARAM = 1,
-  XCL_STATUS_NOT_SUPPORTED = 2,
-  XCL_STATUS_ALLOC_FAILED = 3,
-  XCL_STATUS_EXECUTION_FAILED = 4,
-};
 
 template <typename T>
 struct TPoint {
@@ -64,20 +32,6 @@ using Point = TPoint<int>;
 enum ConnectedMode { FOUR_CONNECT, EIGHT_CONNECT, FULL_CONNECT };
 
 /*
-- 函数说明：在input内逐[block_h, block_w]统计colors中各个颜色的出现次数。
-- 参数说明：
-    input：输入图像，LAYOUT为 HWC or NHWC
-    colors：需要统计的颜色信息，shape 为[L，C]
-    block_h: H维度的采样率
-    block_w: W维度的采样率
-- 返回值:
-    output: 输出图像，shape为 [L, Ho, Wo, Count] or [N, L, Ho, Wo, Count]
-*/
-at::Tensor xclCountInBlock(const at::Tensor &input, const at::Tensor &colors,
-                           const uint &block_h, const uint &block_w);
-void register_count_in_block(py::module &m);
-
-/*
 - 函数说明：输入序列图像和历史路径，输出到目的地的最短规划路径
 - 参数说明：
     segms: 输入识别后的序列图像，LAYOUT为NHWC，DTYPE为uint6
@@ -95,4 +49,4 @@ vector<vector<Point>> xclPathPlan(const at::Tensor &segms,
                                   ConnectedMode connected_mode);
 void register_path_plan(py::module &m);
 
-}
+}  // namespace xcl

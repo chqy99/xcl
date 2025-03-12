@@ -1,4 +1,5 @@
-#include "ops_collection.h"
+#include "count_in_block/count_in_block.h"
+#include "path_plan/path_plan.h"
 
 namespace xcl {
 
@@ -13,16 +14,9 @@ PYBIND11_MODULE(xcl, m) {
       .value("XCL_STATUS_NOT_SUPPORTED", XCL_STATUS_NOT_SUPPORTED)
       .value("XCL_STATUS_ALLOC_FAILED", XCL_STATUS_ALLOC_FAILED)
       .value("XCL_STATUS_EXECUTION_FAILED", XCL_STATUS_EXECUTION_FAILED);
-  py::class_<Point>(m, "Point")
-      .def(py::init<>())
-      .def(py::init<int, int>())
-      .def_readwrite("px", &Point::px)
-      .def_readwrite("py", &Point::py)
-      .def("__repr__", [](const Point &point) {
-          return "Point(px=" + std::to_string(point.px) + ", py=" + std::to_string(point.py) + ")";
-      });
+
   register_count_in_block(m);
   register_path_plan(m);
 }
 
-}
+}  // namespace xcl

@@ -1,11 +1,12 @@
-#include "ops_collection.h"
+#include "count_in_block.h"
+
 #include "kernels/utils/logger.hpp"
 
 namespace xcl {
 
 XclStatus xclCountInBlockCheck(const at::Tensor &input,
-                               const at::Tensor &colors,
-                               const uint &block_h, const uint &block_w) {
+                               const at::Tensor &colors, const uint &block_h,
+                               const uint &block_w) {
   // check dtype
   caffe2::TypeMeta input_type = input.dtype();
   auto colors_type = colors.dtype();
@@ -35,7 +36,7 @@ XclStatus xclCountInBlockCheck(const at::Tensor &input,
 }
 
 at::Tensor xclCountInBlock(const at::Tensor &input, const at::Tensor &colors,
-                          const uint &block_h, const uint &block_w) {
+                           const uint &block_h, const uint &block_w) {
   auto ret = xclCountInBlockCheck(input, colors, block_h, block_w);
   if (ret != XCL_STATUS_SUCCESS) {
     log("ERROR", "xclCountInBlock check param failed.");
@@ -44,9 +45,10 @@ at::Tensor xclCountInBlock(const at::Tensor &input, const at::Tensor &colors,
   return input;
 }
 
-void register_count_in_block(py::module& m) {
+void register_count_in_block(py::module &m) {
   m.def("count_in_block", &xclCountInBlock,
-        "Count the occurrences of each color in color_list within each [block_h, block_w] block in input.");
+        "Count the occurrences of each color in color_list within each "
+        "[block_h, block_w] block in input.");
 }
 
-}
+}  // namespace xcl
