@@ -1,7 +1,7 @@
 import torch
 from xcl import *
 
-image = torch.randint(0, 4, (1, 4, 4, 1), dtype=torch.uint8, device='cuda')
+image = torch.randint(0, 4, (1, 4, 4, 1), dtype=torch.uint8, device="cuda")
 hispath = [[Point(0, 0)], [Point(5, 5)]]
 outpath = [[Point(0, 0)]]
 

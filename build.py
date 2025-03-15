@@ -4,10 +4,10 @@ import sys
 import argparse
 
 # 定义颜色代码
-RED = "\033[91m" # 错误
-GREEN = "\033[92m" # 成功
-YELLOW = "\033[93m" # 警告
-BLUE = "\033[94m" # 提示
+RED = "\033[91m"  # 错误
+GREEN = "\033[92m"  # 成功
+YELLOW = "\033[93m"  # 警告
+BLUE = "\033[94m"  # 提示
 RESET = "\033[0m"  # 重置颜色
 
 # 解析命令行参数
@@ -29,9 +29,13 @@ else:
 
 # 获取 pybind11 的 CMake 路径
 try:
-    pybind11_dir = subprocess.check_output(
-        [sys.executable, "-c", "import pybind11; print(pybind11.get_cmake_dir())"]
-    ).decode().strip()
+    pybind11_dir = (
+        subprocess.check_output(
+            [sys.executable, "-c", "import pybind11; print(pybind11.get_cmake_dir())"]
+        )
+        .decode()
+        .strip()
+    )
 except subprocess.CalledProcessError:
     print(f"{RED}Error: pybind11 not found!{RESET}")
     sys.exit(1)
@@ -40,9 +44,13 @@ print(f"{GREEN}Found pybind11 CMake directory: {pybind11_dir}{RESET}")
 
 # 获取 LibTorch 的 CMake 路径
 try:
-    torch_dir = subprocess.check_output(
-        [sys.executable, "-c", "import torch; print(torch.utils.cmake_prefix_path)"]
-    ).decode().strip()
+    torch_dir = (
+        subprocess.check_output(
+            [sys.executable, "-c", "import torch; print(torch.utils.cmake_prefix_path)"]
+        )
+        .decode()
+        .strip()
+    )
 except subprocess.CalledProcessError:
     print(f"{RED}Error: LibTorch (PyTorch) not found!{RESET}")
     sys.exit(1)
@@ -58,7 +66,7 @@ cmake_command = [
     "../",
     f"-Dpybind11_DIR={pybind11_dir}",
     f"-DCMAKE_PREFIX_PATH={torch_dir}",
-    f"-DXCL_SPECIFIC_OP={xcl_specific_op}"
+    f"-DXCL_SPECIFIC_OP={xcl_specific_op}",
 ]
 print(f"{BLUE}Running cmake...{RESET}")
 subprocess.run(cmake_command, check=True)
