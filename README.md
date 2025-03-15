@@ -18,3 +18,11 @@ python 格式刷使用 'black file_path'；
 
 ## 问题
 该项目无法支持MSVC编译器中文编译
+
+## 环境变量设置
+```shell
+# windows
+$env:PYTHONPATH=".\build\lib\Release;$env:PYTHONPATH"
+# linux
+export LD_LIBRARY_PATH=./build/lib:$LD_LIBRARY_PATH
+```

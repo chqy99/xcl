@@ -1,5 +1,3 @@
-import sys
-sys.path.append("/chenqiyang/my_script/xcl/build/lib/")
 import torch
 from xcl import *
 
