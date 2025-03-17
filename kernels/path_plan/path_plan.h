@@ -21,6 +21,14 @@ struct TPoint {
   }
 };
 using Point = TPoint<int>;
+using Distance = Point;
+
+class Path2d {
+ public:
+  vector<Point> points;
+  vector<Distance> get_move_diffs();
+  Distance get_whole_move_diff();
+};
 
 /*
 - enum说明：移动可选择的方向
@@ -29,24 +37,36 @@ using Point = TPoint<int>;
     八连通，
     全连通
 */
-enum ConnectedMode { FOUR_CONNECT, EIGHT_CONNECT, FULL_CONNECT };
-
+enum ConnectedMode {
+  FOUR_CONNECT,
+  EIGHT_CONNECT,
+  FULL_CONNECT
+};
 /*
-- 函数说明：输入序列图像和历史路径，输出到目的地的最短规划路径
-- 参数说明：
-    segms: 输入识别后的序列图像，LAYOUT为NHWC，DTYPE为uint6
-    hispath: 前N-1个为历史序列，第N个表示起点位置
-    valid_value: 可通行区域的标签值
-    des_value: 目的地的标签值（目标值）
-    connected_mode: 移动可选择的方向
-- 返回值:
-    outpath: 到目的地的最短规划路径，目的地可能有多个
+路径规划方式
 */
-vector<vector<Point>> xclPathPlan(const at::Tensor &segms,
-                                  const vector<vector<Point>> &hispath,
-                                  const vector<uint8> &valid_value,
-                                  const vector<uint8> &des_value,
-                                  ConnectedMode connected_mode);
+enum PathPlanMethod { BROADEST, FURTHEST };
+
+class XclPathPlan2d {
+ public:
+  vector<Path2d> get_optional_paths(at::Tensor segm, const Point start,
+                                    ConnectedMode connected_mode);
+  void add_selected_path(Path2d path);
+  void add_move_diff(Distance diff);
+
+ private:
+  at::Tensor segms;  // segms: 输入识别后的序列图像，LAYOUT为NHWC，DTYPE为uint8
+  at::Tensor whole_scene;     // 序列图像重建全景
+  vector<uint8> valid_value;  // 记录有效区域的值
+  vector<uint8> des_value;    // 记录目标区域的值
+  PathPlanMethod method;      // 路径查询方法
+  bool check_repeat = true;   // 是否避免重复
+  bool fix_view_angle = true;  // 是否固定视角，目前只支持固定视角情况
+  bool check_segm_diff = false;  // 是否需要真实的场景偏移情况
+  vector<Path2d> hispath;        // 记录历史路径
+  vector<Distance> segm_diffs;   // 记录场景移动变化
+};
+
 void register_path_plan(py::module &m);
 
 }  // namespace xcl

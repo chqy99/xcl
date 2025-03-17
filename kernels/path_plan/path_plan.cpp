@@ -2,16 +2,18 @@
 
 namespace xcl {
 
-vector<vector<Point>> xclPathPlan(const at::Tensor &segms,
-                                  const vector<vector<Point>> &hispath,
-                                  const vector<uint8> &valid_value,
-                                  const vector<uint8> &des_value,
-                                  ConnectedMode connected_mode) {
-  vector<vector<Point>> outpath;
-  outpath.clear();
-  outpath.push_back({Point(1, 1)});
-  outpath.push_back({Point(2, 2)});
-  return outpath;
+/*
+- 函数说明：输入序列图像和历史路径，输出到目的地的最短规划路径
+- 参数说明：
+    segms: 输入识别后的序列图像，LAYOUT为HWC，DTYPE为uint6
+    start: 寻路起点
+    connected_mode: 移动可选择的方向
+- 返回值:
+    outpath: 到目的地的最短规划路径，目的地可能有多个
+*/
+vector<Path2d> XclPathPlan2d::get_optional_paths(const at::Tensor segm,
+                                                 const Point start,
+                                                 ConnectedMode connected_mode) {
 }
 
 void register_path_plan(py::module &m) {
@@ -28,7 +30,6 @@ void register_path_plan(py::module &m) {
       .value("FOUR_CONNECT", FOUR_CONNECT)
       .value("EIGHT_CONNECT", EIGHT_CONNECT)
       .value("FULL_CONNECT", FULL_CONNECT);
-  m.def("path_plan", &xclPathPlan, "");
 }
 
 }  // namespace xcl
