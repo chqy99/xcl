@@ -37,11 +37,7 @@ class Path2d {
     八连通，
     全连通
 */
-enum ConnectedMode {
-  FOUR_CONNECT,
-  EIGHT_CONNECT,
-  FULL_CONNECT
-};
+enum ConnectedMode { FOUR_CONNECT, EIGHT_CONNECT, FULL_CONNECT };
 /*
 路径规划方式
 */
@@ -51,20 +47,20 @@ class XclPathPlan2d {
  public:
   vector<Path2d> get_optional_paths(at::Tensor segm, const Point start,
                                     ConnectedMode connected_mode);
-  void add_selected_path(Path2d path);
-  void add_move_diff(Distance diff);
+  void feedback_selected_path(Path2d path, Distance actual_diff);
 
  private:
-  at::Tensor segms;  // segms: 输入识别后的序列图像，LAYOUT为NHWC，DTYPE为uint8
-  at::Tensor whole_scene;     // 序列图像重建全景
-  vector<uint8> valid_value;  // 记录有效区域的值
-  vector<uint8> des_value;    // 记录目标区域的值
-  PathPlanMethod method;      // 路径查询方法
-  bool check_repeat = true;   // 是否避免重复
-  bool fix_view_angle = true;  // 是否固定视角，目前只支持固定视角情况
-  bool check_segm_diff = false;  // 是否需要真实的场景偏移情况
-  vector<Path2d> hispath;        // 记录历史路径
-  vector<Distance> segm_diffs;   // 记录场景移动变化
+  at::Tensor segms;                  // segms: 输入识别后的序列图像，LAYOUT为NHWC，DTYPE为uint8
+  int sample_ratio;                  // 重采样比例
+  at::Tensor whole_scene;            // 序列图像重建全景
+  vector<uint8> valid_value;         // 记录有效区域的值
+  vector<uint8> des_value;           // 记录目标区域的值
+  PathPlanMethod method = BROADEST;  // 路径查询方法
+  bool check_repeat = true;          // 是否避免重复
+  bool fix_view_angle = true;        // 是否固定视角，目前只支持固定视角情况
+  bool check_segm_diff = false;      // 是否需要真实的场景偏移情况
+  vector<Path2d> hispath;            // 记录历史路径
+  vector<Distance> segm_diffs;       // 记录场景移动变化
 };
 
 void register_path_plan(py::module &m);

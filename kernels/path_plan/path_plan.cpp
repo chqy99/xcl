@@ -2,18 +2,34 @@
 
 namespace xcl {
 
-/*
-- 函数说明：输入序列图像和历史路径，输出到目的地的最短规划路径
-- 参数说明：
-    segms: 输入识别后的序列图像，LAYOUT为HWC，DTYPE为uint6
-    start: 寻路起点
-    connected_mode: 移动可选择的方向
-- 返回值:
-    outpath: 到目的地的最短规划路径，目的地可能有多个
-*/
+vector<Distance> Path2d::get_move_diffs() {
+  vector<Distance> res;
+  if (points.size() >= 2) {
+    Point last = points[0];
+    for (int i = 1; i < points.size(); ++i) {
+      Point cur = points[i];
+      res.push_back(Distance(cur.px - last.px, cur.py - last.py));
+      last = cur;
+    }
+  }
+  return res;
+}
+
+Distance Path2d::get_whole_move_diff() {
+  Distance res;
+  size_t len = points.size();
+  if (len >= 2) {
+    res.px = points[len - 1].px - points[0].px;
+    res.py = points[len - 1].py - points[0].py;
+  }
+  return res;
+}
+
 vector<Path2d> XclPathPlan2d::get_optional_paths(const at::Tensor segm,
                                                  const Point start,
                                                  ConnectedMode connected_mode) {
+  vector<Path2d> res;
+  return res;
 }
 
 void register_path_plan(py::module &m) {
