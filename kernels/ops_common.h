@@ -12,13 +12,6 @@ namespace py = pybind11;
 
 namespace xcl {
 
-template <typename T>
-using vector = std::vector<T>;
-
-// typedef dtype
-using uint8 = unsigned char;
-using uint = unsigned int;
-
 /*
 - enum说明：接口返回状态码
 - enum值说明：

@@ -2,8 +2,8 @@
 
 namespace xcl {
 
-vector<Distance> Path2d::get_move_diffs() {
-  vector<Distance> res;
+std::vector<Distance> Path2d::get_move_diffs() {
+  std::vector<Distance> res;
   if (points.size() >= 2) {
     Point last = points[0];
     for (int i = 1; i < points.size(); ++i) {
@@ -25,10 +25,9 @@ Distance Path2d::get_whole_move_diff() {
   return res;
 }
 
-vector<Path2d> XclPathPlan2d::get_optional_paths(const at::Tensor segm,
-                                                 const Point start,
-                                                 ConnectedMode connected_mode) {
-  vector<Path2d> res;
+std::vector<Path2d> XclPathPlan2d::get_optional_paths(
+    const at::Tensor segm, const Point start, ConnectedMode connected_mode) {
+  std::vector<Path2d> res;
   return res;
 }
 
