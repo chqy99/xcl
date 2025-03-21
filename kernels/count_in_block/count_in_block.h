@@ -7,8 +7,8 @@ namespace xcl {
 /*
 - 函数说明：在image内逐[block_height, block_width]统计colors中各个颜色的出现次数。
 - 参数说明：
-    image：输入图像，LAYOUT为 HWC
-    colors：需要统计的颜色信息，shape 为[L，C]
+    image：输入图像，LAYOUT为 HWC 或 HW
+    colors：需要统计的颜色信息，shape 为[L，C] 或 L
     block_height: H维度的采样率
     block_width: W维度的采样率
 - 返回值:
