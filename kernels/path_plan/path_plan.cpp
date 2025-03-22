@@ -2,16 +2,33 @@
 
 namespace xcl {
 
-vector<vector<Point>> xclPathPlan(const at::Tensor &segms,
-                                  const vector<vector<Point>> &hispath,
-                                  const vector<uint8> &valid_value,
-                                  const vector<uint8> &des_value,
-                                  ConnectedMode connected_mode) {
-  vector<vector<Point>> outpath;
-  outpath.clear();
-  outpath.push_back({Point(1, 1)});
-  outpath.push_back({Point(2, 2)});
-  return outpath;
+std::vector<Distance> Path2d::get_move_diffs() {
+  std::vector<Distance> res;
+  if (points.size() >= 2) {
+    Point last = points[0];
+    for (int i = 1; i < points.size(); ++i) {
+      Point cur = points[i];
+      res.push_back(Distance(cur.px - last.px, cur.py - last.py));
+      last = cur;
+    }
+  }
+  return res;
+}
+
+Distance Path2d::get_whole_move_diff() {
+  Distance res;
+  size_t len = points.size();
+  if (len >= 2) {
+    res.px = points[len - 1].px - points[0].px;
+    res.py = points[len - 1].py - points[0].py;
+  }
+  return res;
+}
+
+std::vector<Path2d> XclPathPlan2d::get_optional_paths(
+    const at::Tensor segm, const Point start, ConnectedMode connected_mode) {
+  std::vector<Path2d> res;
+  return res;
 }
 
 void register_path_plan(py::module &m) {
@@ -28,7 +45,6 @@ void register_path_plan(py::module &m) {
       .value("FOUR_CONNECT", FOUR_CONNECT)
       .value("EIGHT_CONNECT", EIGHT_CONNECT)
       .value("FULL_CONNECT", FULL_CONNECT);
-  m.def("path_plan", &xclPathPlan, "");
 }
 
 }  // namespace xcl

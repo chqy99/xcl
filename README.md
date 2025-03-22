@@ -24,5 +24,5 @@ python 格式刷使用 'black file_path'；
 # windows
 $env:PYTHONPATH=".\build\lib\Release;$env:PYTHONPATH"
 # linux
-export LD_LIBRARY_PATH=./build/lib:$LD_LIBRARY_PATH
+export PYTHONPATH="./build/lib:$PYTHONPATH"
 ```
