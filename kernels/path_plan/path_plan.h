@@ -51,7 +51,6 @@ class XclPathPlan2d {
 
  private:
   at::Tensor segms;  // segms: 输入识别后的序列图像，LAYOUT为NHWC，DTYPE为uint8_t
-  int sample_ratio;                  // 重采样比例
   at::Tensor whole_scene;            // 序列图像重建全景
   std::vector<uint8_t> valid_value;    // 记录有效区域的值
   std::vector<uint8_t> des_value;      // 记录目标区域的值

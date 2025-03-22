@@ -6,8 +6,8 @@ namespace xcl {
 
 XclStatus xclCountInBlockCheck(const at::Tensor &image,
                                const at::Tensor &colors,
-                               const uint &block_height,
-                               const uint &block_width) {
+                               const uint32_t &block_height,
+                               const uint32_t &block_width) {
   // check dtype
   caffe2::TypeMeta image_type = image.dtype();
   auto colors_type = colors.dtype();
@@ -24,10 +24,14 @@ XclStatus xclCountInBlockCheck(const at::Tensor &image,
   int64_t image_dim = image_shape.size();
   auto colors_shape = colors.sizes();
   int64_t colors_dim = colors_shape.size();
-  TORCH_CHECK(image_dim == 3);
-  TORCH_CHECK(colors_dim == 2);
+  TORCH_CHECK(image_dim == 2);
+  TORCH_CHECK(colors_dim == 1);
   // check correlation
-  TORCH_CHECK(image_shape[image_dim - 1] == colors_shape[colors_dim - 1]);
+  TORCH_CHECK(image_dim - 1 == colors_dim);
+  if (image_dim == 3) {
+    TORCH_CHECK(image_shape[image_dim - 1] == colors_shape[colors_dim - 1]);
+    return XCL_STATUS_NOT_SUPPORTED;
+  }
   // check num
   int64_t image_num = image.numel();
   int64_t colors_num = colors.numel();
@@ -37,7 +41,7 @@ XclStatus xclCountInBlockCheck(const at::Tensor &image,
 }
 
 at::Tensor xclCountInBlock(const at::Tensor &image, const at::Tensor &colors,
-                           const uint &block_height, const uint &block_width) {
+                           const uint32_t &block_height, const uint32_t &block_width) {
   auto ret = xclCountInBlockCheck(image, colors, block_height, block_width);
   if (ret != XCL_STATUS_SUCCESS) {
     log("ERROR", "xclCountInBlock check param failed.");

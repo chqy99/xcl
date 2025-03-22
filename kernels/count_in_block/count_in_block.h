@@ -13,9 +13,11 @@ namespace xcl {
     block_width: W维度的采样率
 - 返回值:
     output: 输出图像，shape为 [L, Ho, Wo]
+- 注意事项：
+    目前只支持 HW 的输入图像
 */
 at::Tensor xclCountInBlock(const at::Tensor &image, const at::Tensor &colors,
-                           const uint &block_height, const uint &block_width);
+                           const uint32_t &block_height, const uint32_t &block_width);
 
 XclStatus launchCountInBlock(caffe2::TypeMeta data_type, void *data_image,
                              void *data_colors, int *result_ptr, long height,
